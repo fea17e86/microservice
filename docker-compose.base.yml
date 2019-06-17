@@ -1,0 +1,10 @@
+version: "2"
+
+services:
+  qpid:
+    image: fea17e86/qpid-broker-j
+    volumes:
+      - ./message-broker/config:/var/qpid-work
+    ports:
+      - "5672-5673:5672-5673"
+      - "3001:8080"

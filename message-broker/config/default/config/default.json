@@ -1,0 +1,89 @@
+{
+  "id" : "f38a8054-2e2f-4e49-ae0e-8d03f97652e2",
+  "type" : "BDB",
+  "name" : "default",
+  "modelVersion" : "7.1",
+  "lastUpdatedTime" : 1559807474222,
+  "createdTime" : 1559807474222,
+  "exchanges" : [ {
+    "id" : "ae1dfc0b-557a-4ff6-a0c3-e24827b28614",
+    "name" : "amq.direct",
+    "type" : "direct",
+    "lastUpdatedTime" : 1559807474222,
+    "createdTime" : 1559807474222
+  }, {
+    "id" : "3267c8d0-7bdf-44a2-adb5-c4669fefc2cb",
+    "name" : "amq.fanout",
+    "type" : "fanout",
+    "lastUpdatedTime" : 1559807474222,
+    "createdTime" : 1559807474222
+  }, {
+    "id" : "4b95f1dd-011b-40b8-a313-aed2dcbf2d2f",
+    "name" : "amq.match",
+    "type" : "headers",
+    "lastUpdatedTime" : 1559807474222,
+    "createdTime" : 1559807474222
+  }, {
+    "id" : "bbe3dd06-1843-4a40-bda9-7b3722c51293",
+    "name" : "amq.topic",
+    "type" : "topic",
+    "durableBindings" : [ {
+      "arguments" : { },
+      "destination" : "objects",
+      "bindingKey" : "objects.#"
+    } ],
+    "lastUpdatedBy" : "guest",
+    "lastUpdatedTime" : 1560780885523,
+    "createdBy" : null,
+    "createdTime" : 1559807474222
+  }, {
+    "id" : "47f29afd-b80c-4f41-a898-e83222eef8c8",
+    "name" : "objects",
+    "type" : "topic",
+    "durable" : true,
+    "alternateBinding" : {
+      "destination" : "amq.topic"
+    },
+    "durableBindings" : [ {
+      "arguments" : { },
+      "destination" : "object-location-updates",
+      "bindingKey" : "*.update.location"
+    }, {
+      "arguments" : { },
+      "destination" : "object-state-updates",
+      "bindingKey" : "*.update.state"
+    } ],
+    "unroutableMessageBehaviour" : "REJECT",
+    "lastUpdatedBy" : "guest",
+    "lastUpdatedTime" : 1560267270518,
+    "createdBy" : "guest",
+    "createdTime" : 1560253378689
+  } ],
+  "queues" : [ {
+    "id" : "a067ffd6-6c7b-451f-94ba-1759390d4d23",
+    "name" : "object-location-updates",
+    "type" : "lvq",
+    "durable" : true,
+    "holdOnPublishEnabled" : false,
+    "lvqKey" : "lvq-key",
+    "messageDurability" : "ALWAYS",
+    "owner" : null,
+    "lastUpdatedBy" : "guest",
+    "lastUpdatedTime" : 1560267216387,
+    "createdBy" : "guest",
+    "createdTime" : 1560267216387
+  }, {
+    "id" : "b293eab3-184a-4fb8-b3b2-1b0a86e2b588",
+    "name" : "object-state-updates",
+    "type" : "lvq",
+    "durable" : true,
+    "holdOnPublishEnabled" : false,
+    "lvqKey" : "lvq-key",
+    "messageDurability" : "ALWAYS",
+    "owner" : null,
+    "lastUpdatedBy" : "guest",
+    "lastUpdatedTime" : 1560267234632,
+    "createdBy" : "guest",
+    "createdTime" : 1560267234632
+  } ]
+}
