@@ -1,7 +1,7 @@
 import { Id } from "./";
 
-const ERROR_ID_STRING = "Id must be a string!";
-const ERROR_ID_EMPTY = "Id must not be empty!";
+export const ERROR_ID_STRING = "Id must be a string!";
+export const ERROR_ID_EMPTY = "Id must not be empty!";
 
 export function isIdValid(id: Id) {
   if (typeof id !== "string") {

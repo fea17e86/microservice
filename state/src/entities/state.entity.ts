@@ -1,12 +1,4 @@
-import {
-  BatteryCharge,
-  Id,
-  isIdValid,
-  isStateValie,
-  isTypeValid,
-  State,
-  Type
-} from "./";
+import { BatteryCharge, Id, State, Type } from "./";
 
 export interface IMakeStateOptions {
   id: Id;
@@ -22,7 +14,7 @@ export interface IStateEntity {
   readonly batteryCharge?: BatteryCharge;
 }
 
-type ValidatorResult = Error | true;
+type ValidatorResult = boolean;
 export type IdValidator = (id: Id) => ValidatorResult;
 export type TypeValidator = (type: Type) => ValidatorResult;
 export type StateValidator = (
@@ -47,20 +39,9 @@ export default function buildMakeState({
     state,
     batteryCharge
   }: IMakeStateOptions): IStateEntity {
-    const idError = isIdValid(id);
-    if (idError !== undefined) {
-      throw idError;
-    }
-
-    const typeError = isTypeValid(type);
-    if (typeError !== undefined) {
-      throw typeError;
-    }
-
-    const stateError = isStateValid(type, state, batteryCharge);
-    if (stateError !== undefined) {
-      throw stateError;
-    }
+    isIdValid(id);
+    isTypeValid(type);
+    isStateValid(type, state, batteryCharge);
 
     return Object.freeze({
       batteryCharge,

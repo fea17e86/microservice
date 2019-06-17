@@ -3,15 +3,20 @@ import * as cuid from "cuid";
 import {
   BeaconState,
   BedState,
+  ERROR_ID_EMPTY,
+  ERROR_ID_STRING,
+  ERROR_VALID_TYPE,
   IStateEntity,
+  makeState,
   RepeaterState,
   State,
   Type,
   WheelchairState
-} from "./state.entity";
+} from "./";
+
+const types = [Type.BEACON, Type.BED, Type.REPEATER, Type.WHEELCHAIR];
 
 export function getRandomType(): Type {
-  const types = [Type.BEACON, Type.BED, Type.REPEATER, Type.WHEELCHAIR];
   return types[Math.floor(Math.random() * types.length)];
 }
 
@@ -72,10 +77,10 @@ export function getRandomBatteryCharge(type: Type, state: State) {
 }
 
 interface IStateOverrides {
-  id?: undefined;
-  type?: undefined;
-  state?: undefined;
-  batteryCharge?: undefined;
+  id?: any;
+  type?: any;
+  state?: any;
+  batteryCharge?: any;
 }
 
 export function makeFakeState(overrides: IStateOverrides): IStateEntity {
@@ -93,10 +98,30 @@ export function makeFakeState(overrides: IStateOverrides): IStateEntity {
 
 describe("state", () => {
   it("must have a valid id", () => {
-    expect(() => makeFakeState({ id: undefined })).toThrow(
-      "Id must be a string!"
+    const validId = "xcjahhe176712";
+    expect(makeState(makeFakeState({ id: validId }))).toMatchObject({
+      id: validId
+    });
+
+    expect(() => makeState(makeFakeState({ id: undefined }))).toThrow(
+      ERROR_ID_STRING
+    );
+
+    expect(() => makeState(makeFakeState({ id: 17 }))).toThrow(ERROR_ID_STRING);
+
+    expect(() => makeState(makeFakeState({ id: " " }))).toThrow(ERROR_ID_EMPTY);
+  });
+
+  it("must have a valid type", () => {
+    types.forEach(type => {
+      expect(makeState(makeFakeState({ type }))).toMatchObject({
+        type
+      });
+    });
+
+    expect(() => makeState(makeFakeState({ type: "bla" }))).toThrow(
+      ERROR_VALID_TYPE
     );
   });
-  it.todo("must have a valid type");
   it.todo("must have a valid state");
 });

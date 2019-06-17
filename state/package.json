@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "description": "state",
   "license": "UNLICENSED",
-  "repository": "git@github.com:fea17e86/microservice.git",
   "author": {
     "name": "fea17e86",
     "email": "fea17e86@mail.de",
@@ -27,7 +26,7 @@
     "build": "tsc --pretty",
     "build:watch": "nodemon --legacy-watch src/index.ts",
     "test": "jest",
-    "test:watch": "jest --watchAll",
+    "test:watch": "jest --watch",
     "coverage": "jest --coverage"
   },
   "dependencies": {},
