@@ -1,0 +1,25 @@
+version: "2"
+
+volumes:
+  state-nodemodules:
+    external: true
+
+services:
+  base:
+    image: node:10
+    volumes:
+      - state-nodemodules:/usr/work/node_modules
+      - .:/usr/work/
+    working_dir: /usr/work/
+    environment:
+      - NODE_ENV=development
+
+  build:
+    extends:
+      service: base
+    command: npm run build:watch
+
+  test:
+    extends:
+      service: base
+    command: npm run test:watch
