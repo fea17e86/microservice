@@ -29,7 +29,11 @@
     "test:watch": "jest --no-cache --watch",
     "coverage": "jest --no-cache --coverage"
   },
-  "dependencies": {},
+  "dependencies": {
+    "mongoose": "^5.6.0",
+    "reflect-metadata": "^0.1.13",
+    "typegoose": "^5.7.2"
+  },
   "devDependencies": {
     "@types/jest": "^24.0.13",
     "@types/node": "^10.14.7",
