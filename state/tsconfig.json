@@ -18,6 +18,9 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src/**/*", "node_modules/@types"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+  "paths": {
+    "~src/*": ["src/*"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }

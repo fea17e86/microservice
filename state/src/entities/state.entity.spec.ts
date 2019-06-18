@@ -1,5 +1,6 @@
 /// <reference types="jest" />
 import * as cuid from "cuid";
+
 import {
   BeaconState,
   BedState,
