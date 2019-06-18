@@ -1,5 +1,2 @@
 export * from "./state.type";
-
-export function isStateValid() {
-  return true;
-}
+export * from "./state.validator";

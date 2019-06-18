@@ -17,18 +17,20 @@ export interface IStateEntity {
 type ValidatorResult = boolean;
 export type IdValidator = (id: Id) => ValidatorResult;
 export type TypeValidator = (type: Type) => ValidatorResult;
-export type StateValidator = (
+export type StateValidator = (type: Type, state: State) => ValidatorResult;
+export type BatteryChargeValidator = (
   type: Type,
-  state: State,
   batteryCharge?: BatteryCharge
 ) => ValidatorResult;
 interface IBuildMakeStateOptions {
+  isBatteryChargeValid: BatteryChargeValidator;
   isIdValid: IdValidator;
   isTypeValid: TypeValidator;
   isStateValid: StateValidator;
 }
 
 export default function buildMakeState({
+  isBatteryChargeValid,
   isIdValid,
   isTypeValid,
   isStateValid
@@ -41,7 +43,8 @@ export default function buildMakeState({
   }: IMakeStateOptions): IStateEntity {
     isIdValid(id);
     isTypeValid(type);
-    isStateValid(type, state, batteryCharge);
+    isStateValid(type, state);
+    isBatteryChargeValid(type, batteryCharge);
 
     return Object.freeze({
       batteryCharge,

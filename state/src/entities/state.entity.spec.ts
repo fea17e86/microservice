@@ -3,8 +3,12 @@ import * as cuid from "cuid";
 import {
   BeaconState,
   BedState,
+  ERROR_BATTERY_CHARGE_BETWEEN_0_1,
+  ERROR_BATTERY_CHARGE_FINITE_NUMBER,
+  ERROR_BATTERY_CHARGE_UNDEFINED_FOR_TYPE,
   ERROR_ID_EMPTY,
   ERROR_ID_STRING,
+  ERROR_VALID_STATE,
   ERROR_VALID_TYPE,
   IStateEntity,
   makeState,
@@ -64,13 +68,9 @@ export function getRandomState(type: Type): State {
   }
 }
 
-export function getRandomBatteryCharge(type: Type, state: State) {
+export function getRandomBatteryCharge(type: Type) {
   if (type === Type.BEACON) {
-    if (state === BeaconState.LOW_BATTERY) {
-      return Math.round(Math.random() * 30) / 100;
-    }
-
-    return (Math.round(Math.random() * 69) + 31) / 100;
+    return Math.round(Math.random() * 100) / 100;
   }
 
   return undefined;
@@ -86,7 +86,7 @@ interface IStateOverrides {
 export function makeFakeState(overrides: IStateOverrides): IStateEntity {
   const type = getRandomType();
   const state = getRandomState(type);
-  const batteryCharge = getRandomBatteryCharge(type, state);
+  const batteryCharge = getRandomBatteryCharge(type);
   return {
     batteryCharge,
     id: cuid(),
@@ -114,14 +114,108 @@ describe("state", () => {
 
   it("must have a valid type", () => {
     types.forEach(type => {
-      expect(makeState(makeFakeState({ type }))).toMatchObject({
+      expect(
+        makeState(
+          makeFakeState({
+            batteryCharge: getRandomBatteryCharge(type),
+            state: getRandomState(type),
+            type
+          })
+        )
+      ).toMatchObject({
         type
       });
     });
 
-    expect(() => makeState(makeFakeState({ type: "bla" }))).toThrow(
+    expect(() => makeState(makeFakeState({ type: undefined }))).toThrow(
+      ERROR_VALID_TYPE
+    );
+
+    expect(() => makeState(makeFakeState({ type: 0 }))).toThrow(
       ERROR_VALID_TYPE
     );
   });
-  it.todo("must have a valid state");
+
+  it("must have a valid state", () => {
+    const randomType = getRandomType();
+    const randomState = getRandomState(randomType);
+    const randomBatteryCharge = getRandomBatteryCharge(randomType);
+
+    expect(
+      makeState(
+        makeFakeState({
+          batteryCharge: randomBatteryCharge,
+          state: randomState,
+          type: randomType
+        })
+      )
+    ).toMatchObject({
+      batteryCharge: randomBatteryCharge,
+      state: randomState,
+      type: randomType
+    });
+
+    expect(() =>
+      makeState(
+        makeFakeState({ state: BedState.OCCUPIED, type: Type.REPEATER })
+      )
+    ).toThrow(ERROR_VALID_STATE);
+
+    expect(() => makeState(makeFakeState({ state: undefined }))).toThrow(
+      ERROR_VALID_STATE
+    );
+
+    expect(() => makeState(makeFakeState({ state: 0 }))).toThrow(
+      ERROR_VALID_STATE
+    );
+  });
+
+  it("must have a valid battery charge", () => {
+    const validBatteryCharge = {
+      batteryCharge: 0.8,
+      state: BeaconState.OK,
+      type: Type.BEACON
+    };
+
+    expect(makeState(makeFakeState(validBatteryCharge))).toMatchObject(
+      validBatteryCharge
+    );
+
+    expect(() =>
+      makeState(
+        makeFakeState({
+          ...validBatteryCharge,
+          batteryCharge: undefined
+        })
+      )
+    ).toThrow(ERROR_BATTERY_CHARGE_FINITE_NUMBER);
+
+    expect(() =>
+      makeState(
+        makeFakeState({
+          ...validBatteryCharge,
+          batteryCharge: 1.1
+        })
+      )
+    ).toThrow(ERROR_BATTERY_CHARGE_BETWEEN_0_1);
+
+    expect(() =>
+      makeState(
+        makeFakeState({
+          ...validBatteryCharge,
+          batteryCharge: -1
+        })
+      )
+    ).toThrow(ERROR_BATTERY_CHARGE_BETWEEN_0_1);
+
+    expect(() =>
+      makeState(
+        makeFakeState({
+          ...validBatteryCharge,
+          state: BedState.FREE,
+          type: Type.BED
+        })
+      )
+    ).toThrow(ERROR_BATTERY_CHARGE_UNDEFINED_FOR_TYPE);
+  });
 });

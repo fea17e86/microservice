@@ -25,9 +25,9 @@
     "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
     "build:watch": "nodemon --legacy-watch src/index.ts",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "coverage": "jest --coverage"
+    "test": "jest --no-cache",
+    "test:watch": "jest --no-cache --watch",
+    "coverage": "jest --no-cache --coverage"
   },
   "dependencies": {},
   "devDependencies": {
