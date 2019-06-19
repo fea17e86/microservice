@@ -7,7 +7,7 @@ export interface IMakeStateOptions {
   batteryCharge?: BatteryCharge;
 }
 
-export interface IStateEntity {
+export interface IStateItem {
   readonly id: Id;
   readonly type: Type;
   readonly state: State;
@@ -34,13 +34,13 @@ export default function buildMakeState({
   isIdValid,
   isTypeValid,
   isStateValid
-}: IBuildMakeStateOptions): (options: IMakeStateOptions) => IStateEntity {
+}: IBuildMakeStateOptions): (options: IMakeStateOptions) => IStateItem {
   return function makeState({
     id,
     type,
     state,
     batteryCharge
-  }: IMakeStateOptions): IStateEntity {
+  }: IMakeStateOptions): IStateItem {
     isIdValid(id);
     isTypeValid(type);
     isStateValid(type, state);

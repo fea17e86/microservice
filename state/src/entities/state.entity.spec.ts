@@ -1,4 +1,3 @@
-/// <reference types="jest" />
 import * as cuid from "cuid";
 
 import {
@@ -11,7 +10,7 @@ import {
   ERROR_ID_STRING,
   ERROR_VALID_STATE,
   ERROR_VALID_TYPE,
-  IStateEntity,
+  IStateItem,
   makeState,
   RepeaterState,
   State,
@@ -84,7 +83,7 @@ interface IStateOverrides {
   batteryCharge?: any;
 }
 
-export function makeFakeState(overrides: IStateOverrides): IStateEntity {
+export function makeFakeState(overrides: IStateOverrides): IStateItem {
   const type = getRandomType();
   const state = getRandomState(type);
   const batteryCharge = getRandomBatteryCharge(type);
