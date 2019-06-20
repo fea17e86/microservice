@@ -1,4 +1,3 @@
-import { Type } from "..";
 import {
   BeaconState,
   BedState,
@@ -6,6 +5,7 @@ import {
   State,
   WheelchairState
 } from ".";
+import { Type } from "..";
 
 export const ERROR_VALID_STATE = "State must be valid!";
 
