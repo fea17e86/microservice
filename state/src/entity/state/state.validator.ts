@@ -1,11 +1,11 @@
-import { Type } from "../";
+import { Type } from "..";
 import {
   BeaconState,
   BedState,
   RepeaterState,
   State,
   WheelchairState
-} from "./";
+} from ".";
 
 export const ERROR_VALID_STATE = "State must be valid!";
 

@@ -1,4 +1,4 @@
-import { Type } from "./";
+import { Type } from ".";
 
 export const ERROR_VALID_TYPE = "Type must be valid!";
 

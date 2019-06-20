@@ -1,4 +1,4 @@
-import { BatteryCharge, Id, State, Type } from "./";
+import { BatteryCharge, Id, State, Type } from ".";
 
 export interface IMakeStateOptions {
   id: Id;

@@ -1,5 +1,5 @@
-import { Type } from "../";
-import { BatteryCharge } from "./";
+import { Type } from "..";
+import { BatteryCharge } from ".";
 
 export const ERROR_BATTERY_CHARGE_FINITE_NUMBER =
   "BatteryCharge must be a finite number!";
