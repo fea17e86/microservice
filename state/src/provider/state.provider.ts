@@ -1,70 +1,34 @@
-import { BatteryCharge, Id, IStateItem, State } from "../entities";
-import { IStateDocument, IStateModel } from "./state.model";
+import { Id, IStateItem } from "../entity";
+import { ISetStateItem, IStateModel } from "./state.model";
 
 interface IBuildMakeStateProviderOptions {
   getStateModel: () => Promise<IStateModel>;
 }
 
-interface IStateProperties {
-  state: State;
-  batteryCharge?: BatteryCharge;
-}
-
 export interface IStateProvider {
-  find: (properties: Partial<IStateItem>) => Promise<IStateDocument[]>;
-  get: (id: Id) => Promise<IStateDocument | undefined>;
-  insert: (item: IStateItem) => Promise<IStateDocument>;
-  update: (
-    id: Id,
-    properties: Partial<IStateProperties>
-  ) => Promise<IStateDocument | undefined>;
+  get(id: Id): Promise<IStateItem | undefined>;
+  list(conditions?: Partial<IStateItem>): Promise<IStateItem[]>;
+  set(item: ISetStateItem): Promise<IStateItem>;
 }
 
-export default function makeStateProvider({
+export function makeStateProvider({
   getStateModel
 }: IBuildMakeStateProviderOptions): IStateProvider {
-  async function find(
-    properties: Partial<IStateItem> = {}
-  ): Promise<IStateDocument[]> {
-    const StateModel = await getStateModel();
-    const query = StateModel.find(properties);
-    return query.exec();
+  async function get(id: Id): Promise<IStateItem | undefined> {
+    return (await getStateModel()).get(id);
   }
 
-  async function get(id: Id): Promise<IStateDocument | undefined> {
-    const StateModel = await getStateModel();
-    const doc: IStateDocument | null = await StateModel.findOne({ id });
-    if (doc != null) {
-      return doc;
-    }
-    return undefined;
+  async function list(conditions?: Partial<IStateItem>): Promise<IStateItem[]> {
+    return (await getStateModel()).list(conditions);
   }
 
-  async function insert(item: IStateItem): Promise<IStateDocument> {
-    const StateModel = await getStateModel();
-    const newDoc = new StateModel(item);
-    return newDoc.save();
-  }
-
-  async function update(
-    id: Id,
-    properties: Partial<IStateProperties>
-  ): Promise<IStateDocument | undefined> {
-    const StateModel = await getStateModel();
-    const updatedDoc: IStateDocument | null = await StateModel.findOneAndUpdate(
-      { id },
-      properties
-    );
-    if (updatedDoc != null) {
-      return updatedDoc;
-    }
-    return undefined;
+  async function set(item: ISetStateItem): Promise<IStateItem> {
+    return (await getStateModel()).set(item);
   }
 
   return Object.freeze({
-    find,
     get,
-    insert,
-    update
+    list,
+    set
   });
 }

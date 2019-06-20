@@ -1,5 +1,13 @@
-import { Document, Model, Mongoose, Schema } from "mongoose";
-import { BatteryCharge, Id, State, Type } from "../entities";
+import {
+  Document as MongooseDocument,
+  Model as MongooseModel,
+  Schema as MongooseSchema
+} from "mongoose";
+import { BatteryCharge, Id, IStateItem, State, Type } from "../entity";
+
+export type Document = MongooseDocument;
+export type Model<T extends Document> = MongooseModel<T>;
+export class Schema<T extends Document> extends MongooseSchema<T> {}
 
 export interface IStateDocument extends Document {
   id: Id;
@@ -8,17 +16,24 @@ export interface IStateDocument extends Document {
   batteryCharge?: BatteryCharge;
 }
 
-export const StateSchema = new Schema({
+export const StateSchema = new Schema<IStateDocument>({
   batteryCharge: Number,
   id: { type: String, required: true },
   state: { type: String },
   type: { type: String, enum: Type }
 });
 
+export interface ISetStateItem {
+  batteryCharge?: BatteryCharge;
+  id: Id;
+  state?: State;
+  type?: Type;
+}
+
 export const MODEL_NAME = "State";
 
-export type IStateModel = Model<IStateDocument>;
-
-export default function makeModel(mongoose: Mongoose): IStateModel {
-  return mongoose.model<IStateDocument>(MODEL_NAME, StateSchema);
+export interface IStateModel extends Model<IStateDocument> {
+  get(id: Id): Promise<IStateDocument | undefined>;
+  list(conditions?: Partial<IStateItem>): Promise<IStateDocument[]>;
+  set(item: ISetStateItem): Promise<IStateDocument>;
 }

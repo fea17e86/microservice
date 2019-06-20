@@ -1,32 +1,29 @@
-import { connect, Mongoose } from "mongoose";
-import makeStateModel, { IStateModel } from "./state.model";
-import makeStateProvider, { IStateProvider } from "./state.provider";
+import { IStateModel, MODEL_NAME, StateSchema } from "./state.model";
+import { StateModelFactory } from "./state.model.factory";
+import { IStateProvider, makeStateProvider } from "./state.provider";
 import { Configuration, ConfigurationKey } from "./utils";
+export * from "./state.model";
+export * from "./state.model.factory";
+export * from "./state.provider";
+export * from "./utils";
 
 const uri: string = `${Configuration.get(
   ConfigurationKey.DATABASE_URL
 )}/${Configuration.get(ConfigurationKey.DATABASE_NAME)}`;
 
 const options = {
-  pass: Configuration.get(ConfigurationKey.DATABASE_PASSWORD),
-  user: Configuration.get(ConfigurationKey.DATABASE_USER_NAME)
+  password: Configuration.get(ConfigurationKey.DATABASE_PASSWORD),
+  username: Configuration.get(ConfigurationKey.DATABASE_USER_NAME)
 };
 
-let connection: Mongoose | undefined;
-let StateModel: IStateModel;
+const stateModelFactory = new StateModelFactory(uri, options);
+let StateModel: IStateModel | undefined;
 
-export async function getStateModel(): Promise<IStateModel> {
-  if (connection === undefined) {
-    try {
-      connection = await connect(
-        uri,
-        options
-      );
-      StateModel = makeStateModel(connection);
-    } catch (e) {
-      process.stderr.write("Caught error while trying to connect!", e);
-    }
+async function getStateModel() {
+  if (StateModel === undefined) {
+    StateModel = await stateModelFactory.model(MODEL_NAME, StateSchema);
   }
+
   return StateModel;
 }
 
