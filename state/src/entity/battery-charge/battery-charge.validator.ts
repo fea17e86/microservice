@@ -1,5 +1,4 @@
 import { Type } from "..";
-import { BatteryCharge } from ".";
 
 export const ERROR_BATTERY_CHARGE_FINITE_NUMBER =
   "BatteryCharge must be a finite number!";
@@ -8,12 +7,13 @@ export const ERROR_BATTERY_CHARGE_BETWEEN_0_1 =
 export const ERROR_BATTERY_CHARGE_UNDEFINED_FOR_TYPE =
   "BatteryCharge must be undefined for this type!";
 
-export function isBatteryChargeValid(
-  type: Type,
-  batteryCharge?: BatteryCharge
-) {
+export function isBatteryChargeValid(type?: any, batteryCharge?: any) {
   if (type === Type.BEACON) {
-    if (batteryCharge === undefined || !isFinite(batteryCharge)) {
+    if (
+      batteryCharge === undefined ||
+      typeof batteryCharge !== "number" ||
+      !isFinite(batteryCharge)
+    ) {
       throw new Error(ERROR_BATTERY_CHARGE_FINITE_NUMBER);
     }
 

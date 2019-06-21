@@ -1,56 +1,38 @@
 import { BatteryCharge, Id, State, Type } from ".";
 
-export interface IMakeStateOptions {
-  id: Id;
-  type: Type;
-  state: State;
-  batteryCharge?: BatteryCharge;
-}
-
-export interface IStateItem {
+export interface IStateEntity {
   readonly id: Id;
   readonly type: Type;
   readonly state: State;
   readonly batteryCharge?: BatteryCharge;
 }
 
-type ValidatorResult = boolean;
-export type IdValidator = (id: Id) => ValidatorResult;
-export type TypeValidator = (type: Type) => ValidatorResult;
-export type StateValidator = (type: Type, state: State) => ValidatorResult;
-export type BatteryChargeValidator = (
-  type: Type,
-  batteryCharge?: BatteryCharge
-) => ValidatorResult;
 interface IBuildMakeStateOptions {
-  isBatteryChargeValid: BatteryChargeValidator;
-  isIdValid: IdValidator;
-  isTypeValid: TypeValidator;
-  isStateValid: StateValidator;
+  isStateEntityValid: (...arg: any[]) => boolean;
 }
 
-export default function buildMakeState({
-  isBatteryChargeValid,
-  isIdValid,
-  isTypeValid,
-  isStateValid
-}: IBuildMakeStateOptions): (options: IMakeStateOptions) => IStateItem {
-  return function makeState({
-    id,
-    type,
-    state,
-    batteryCharge
-  }: IMakeStateOptions): IStateItem {
-    isIdValid(id);
-    isTypeValid(type);
-    isStateValid(type, state);
-    isBatteryChargeValid(type, batteryCharge);
+interface IMakeStateProperties {
+  id: Id;
+  type: Type;
+  state: State;
+  batteryCharge?: BatteryCharge;
+}
+
+export type MakeStateEntity = (
+  properties: IMakeStateProperties
+) => IStateEntity;
+
+export function buildMakeState({
+  isStateEntityValid
+}: IBuildMakeStateOptions): MakeStateEntity {
+  return function makeState(properties: IMakeStateProperties): IStateEntity {
+    isStateEntityValid(properties);
 
     return Object.freeze({
-      batteryCharge,
-      id,
-      state,
-      type
+      batteryCharge: properties.batteryCharge,
+      id: properties.id,
+      state: properties.state,
+      type: properties.type
     });
   };
 }

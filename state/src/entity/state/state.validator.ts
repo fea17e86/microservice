@@ -1,15 +1,9 @@
-import {
-  BeaconState,
-  BedState,
-  RepeaterState,
-  State,
-  WheelchairState
-} from ".";
+import { BeaconState, BedState, RepeaterState, WheelchairState } from ".";
 import { Type } from "..";
 
 export const ERROR_VALID_STATE = "State must be valid!";
 
-export function isStateValid(type: Type, state: State) {
+export function isStateValid(type?: any, state?: any) {
   switch (type) {
     case Type.BEACON: {
       if (Object.values(BeaconState).includes(state)) {

@@ -3,7 +3,7 @@ import {
   Model as MongooseModel,
   Schema as MongooseSchema
 } from "mongoose";
-import { BatteryCharge, Id, IStateItem, State, Type } from "../entity";
+import { BatteryCharge, Id, IStateEntity, State, Type } from "../entity";
 
 export type Document = MongooseDocument;
 export type Model<T extends Document> = MongooseModel<T>;
@@ -34,6 +34,6 @@ export const MODEL_NAME = "State";
 
 export interface IStateModel extends Model<IStateDocument> {
   get(id: Id): Promise<IStateDocument | undefined>;
-  list(conditions?: Partial<IStateItem>): Promise<IStateDocument[]>;
+  list(conditions?: Partial<IStateEntity>): Promise<IStateDocument[]>;
   set(item: ISetStateItem): Promise<IStateDocument>;
 }

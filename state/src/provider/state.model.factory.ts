@@ -1,5 +1,5 @@
 import { connect, Mongoose } from "mongoose";
-import { Id, IStateItem } from "../entity";
+import { Id, IStateEntity } from "../entity";
 import { ISetStateItem, IStateDocument, IStateModel, Model, Schema } from "./";
 
 export type MakeStateModel = (
@@ -38,7 +38,7 @@ export class StateModelFactory implements IStateModelFactory {
     const StateModel: IStateModel = MongooseModel as IStateModel;
 
     StateModel.list = async function list(
-      properties?: Partial<IStateItem>
+      properties?: Partial<IStateEntity>
     ): Promise<IStateDocument[]> {
       return StateModel.find(properties).exec();
     };
