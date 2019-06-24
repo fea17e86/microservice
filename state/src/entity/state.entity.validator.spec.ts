@@ -17,7 +17,8 @@ describe("StateEntity > makeState", () => {
     },
     { id: "sdsdhsd765t", type: Type.BED, state: BedState.FREE },
     { id: "jdksdf87zfd", type: Type.REPEATER, state: RepeaterState.BROKEN },
-    { id: "0", type: Type.WHEELCHAIR, state: WheelchairState.FREE }
+    { id: "0", type: Type.WHEELCHAIR, state: WheelchairState.FREE },
+    { id: "a", state: BeaconState.LOW_BATTERY, type: Type.BEACON }
   ];
 
   validEntities.forEach(entity => {
@@ -35,7 +36,6 @@ describe("StateEntity > makeState", () => {
     { id: "a", state: 0, type: Type.WHEELCHAIR },
     { id: "a", state: "  ", type: Type.REPEATER },
     { id: "a", state: BedState.DIRTY, type: Type.REPEATER },
-    { id: "a", state: BeaconState.LOW_BATTERY, type: Type.BEACON },
     {
       batteryCharge: -1,
       id: "a",

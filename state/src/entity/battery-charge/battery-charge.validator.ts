@@ -8,21 +8,19 @@ export const ERROR_BATTERY_CHARGE_UNDEFINED_FOR_TYPE =
   "BatteryCharge must be undefined for this type!";
 
 export function isBatteryChargeValid(type?: any, batteryCharge?: any) {
-  if (type === Type.BEACON) {
-    if (
-      batteryCharge === undefined ||
-      typeof batteryCharge !== "number" ||
-      !isFinite(batteryCharge)
-    ) {
-      throw new Error(ERROR_BATTERY_CHARGE_FINITE_NUMBER);
-    }
+  if (batteryCharge !== undefined) {
+    if (type === Type.BEACON) {
+      if (typeof batteryCharge !== "number" || !isFinite(batteryCharge)) {
+        throw new Error(ERROR_BATTERY_CHARGE_FINITE_NUMBER);
+      }
 
-    if (batteryCharge < 0 || batteryCharge > 1) {
-      throw new Error(ERROR_BATTERY_CHARGE_BETWEEN_0_1);
-    }
-  } else {
-    if (batteryCharge !== undefined) {
-      throw new Error(ERROR_BATTERY_CHARGE_UNDEFINED_FOR_TYPE);
+      if (batteryCharge < 0 || batteryCharge > 1) {
+        throw new Error(ERROR_BATTERY_CHARGE_BETWEEN_0_1);
+      }
+    } else {
+      if (batteryCharge !== undefined) {
+        throw new Error(ERROR_BATTERY_CHARGE_UNDEFINED_FOR_TYPE);
+      }
     }
   }
 
