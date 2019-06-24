@@ -1,19 +1,24 @@
 import { Id, IStateEntity } from "../entity";
-import { ISetStateItem, IStateModel } from "./state.model";
+import { IPatchStateItem, IStateModel } from "./state.model";
 
 interface IBuildMakeStateProviderOptions {
   getStateModel: () => Promise<IStateModel>;
 }
 
 export interface IStateProvider {
+  add(item: IStateEntity): Promise<IStateEntity>;
   get(id: Id): Promise<IStateEntity | undefined>;
   list(conditions?: Partial<IStateEntity>): Promise<IStateEntity[]>;
-  set(item: ISetStateItem): Promise<IStateEntity>;
+  patch(item: IPatchStateItem): Promise<IStateEntity | undefined>;
 }
 
 export function makeStateProvider({
   getStateModel
 }: IBuildMakeStateProviderOptions): IStateProvider {
+  async function add(item: IStateEntity): Promise<IStateEntity> {
+    return (await getStateModel()).add(item);
+  }
+
   async function get(id: Id): Promise<IStateEntity | undefined> {
     return (await getStateModel()).get(id);
   }
@@ -24,13 +29,16 @@ export function makeStateProvider({
     return (await getStateModel()).list(conditions);
   }
 
-  async function set(item: ISetStateItem): Promise<IStateEntity> {
-    return (await getStateModel()).set(item);
+  async function patch(
+    item: IPatchStateItem
+  ): Promise<IStateEntity | undefined> {
+    return (await getStateModel()).patch(item);
   }
 
   return Object.freeze({
+    add,
     get,
     list,
-    set
+    patch
   });
 }

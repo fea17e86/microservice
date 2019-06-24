@@ -23,7 +23,7 @@ export const StateSchema = new Schema<IStateDocument>({
   type: { type: String, enum: Type }
 });
 
-export interface ISetStateItem {
+export interface IPatchStateItem {
   batteryCharge?: BatteryCharge;
   id: Id;
   state?: State;
@@ -33,7 +33,8 @@ export interface ISetStateItem {
 export const MODEL_NAME = "State";
 
 export interface IStateModel extends Model<IStateDocument> {
+  add(item: IStateEntity): Promise<IStateDocument>;
   get(id: Id): Promise<IStateDocument | undefined>;
   list(conditions?: Partial<IStateEntity>): Promise<IStateDocument[]>;
-  set(item: ISetStateItem): Promise<IStateDocument>;
+  patch(item: IPatchStateItem): Promise<IStateDocument | undefined>;
 }

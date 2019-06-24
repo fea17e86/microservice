@@ -1,6 +1,12 @@
 import { connect, Mongoose } from "mongoose";
 import { Id, IStateEntity } from "../entity";
-import { ISetStateItem, IStateDocument, IStateModel, Model, Schema } from "./";
+import {
+  IPatchStateItem,
+  IStateDocument,
+  IStateModel,
+  Model,
+  Schema
+} from "./";
 
 export type MakeStateModel = (
   name: string,
@@ -37,6 +43,18 @@ export class StateModelFactory implements IStateModelFactory {
     );
     const StateModel: IStateModel = MongooseModel as IStateModel;
 
+    StateModel.add = async function add(
+      item: IStateEntity
+    ): Promise<IStateDocument> {
+      const existing: IStateDocument | undefined = await this.get(item.id);
+      if (existing === undefined) {
+        const newItem = new MongooseModel(item);
+        return newItem.save();
+      } else {
+        return existing;
+      }
+    };
+
     StateModel.list = async function list(
       properties?: Partial<IStateEntity>
     ): Promise<IStateDocument[]> {
@@ -55,16 +73,15 @@ export class StateModelFactory implements IStateModelFactory {
       return undefined;
     };
 
-    StateModel.set = async function set(
-      item: ISetStateItem
-    ): Promise<IStateDocument> {
-      const existing: IStateDocument | undefined = await this.get(item.id);
-      if (existing === undefined) {
-        const newItem = new MongooseModel(item);
-        return newItem.save();
-      } else {
-        return existing.update(item).exec();
-      }
+    StateModel.patch = async function patch({
+      id,
+      ...update
+    }: IPatchStateItem): Promise<IStateDocument | undefined> {
+      const patchedItem: IStateDocument | null = await StateModel.findOneAndUpdate(
+        { id },
+        update
+      );
+      return patchedItem == null ? undefined : patchedItem;
     };
 
     return StateModel;
