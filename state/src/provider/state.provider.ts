@@ -1,5 +1,5 @@
-import { Id, IStateEntity } from "../entity";
-import { IPatchStateItem, IStateModel } from "./state.model";
+import { IStateEntity } from "../entity";
+import { IPatchStateProperties, IStateModel } from "./state.model";
 
 interface IBuildMakeStateProviderOptions {
   getStateModel: () => Promise<IStateModel>;
@@ -7,9 +7,12 @@ interface IBuildMakeStateProviderOptions {
 
 export interface IStateProvider {
   add(item: IStateEntity): Promise<IStateEntity>;
-  get(id: Id): Promise<IStateEntity | undefined>;
+  get(id: string): Promise<IStateEntity | undefined>;
   list(conditions?: Partial<IStateEntity>): Promise<IStateEntity[]>;
-  patch(item: IPatchStateItem): Promise<IStateEntity | undefined>;
+  patch(
+    id: string,
+    properties: IPatchStateProperties
+  ): Promise<IStateEntity | undefined>;
 }
 
 export function makeStateProvider({
@@ -19,7 +22,7 @@ export function makeStateProvider({
     return (await getStateModel()).add(item);
   }
 
-  async function get(id: Id): Promise<IStateEntity | undefined> {
+  async function get(id: string): Promise<IStateEntity | undefined> {
     return (await getStateModel()).get(id);
   }
 
@@ -30,9 +33,10 @@ export function makeStateProvider({
   }
 
   async function patch(
-    item: IPatchStateItem
+    id: string,
+    properties: IPatchStateProperties
   ): Promise<IStateEntity | undefined> {
-    return (await getStateModel()).patch(item);
+    return (await getStateModel()).patch(id, properties);
   }
 
   return Object.freeze({

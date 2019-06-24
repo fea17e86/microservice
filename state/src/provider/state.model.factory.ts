@@ -1,7 +1,7 @@
 import { connect, Mongoose } from "mongoose";
-import { Id, IStateEntity } from "../entity";
+import { IStateEntity } from "../entity";
 import {
-  IPatchStateItem,
+  IPatchStateProperties,
   IStateDocument,
   IStateModel,
   Model,
@@ -62,7 +62,7 @@ export class StateModelFactory implements IStateModelFactory {
     };
 
     StateModel.get = async function get(
-      id: Id
+      id: string
     ): Promise<IStateDocument | undefined> {
       const doc: IStateDocument | null = await StateModel.findOne({
         id
@@ -73,13 +73,13 @@ export class StateModelFactory implements IStateModelFactory {
       return undefined;
     };
 
-    StateModel.patch = async function patch({
-      id,
-      ...update
-    }: IPatchStateItem): Promise<IStateDocument | undefined> {
-      const patchedItem: IStateDocument | null = await StateModel.findOneAndUpdate(
-        { id },
-        update
+    StateModel.patch = async function patch(
+      id: string,
+      properties: IPatchStateProperties
+    ): Promise<IStateDocument | undefined> {
+      const patchedItem: IStateDocument | null = await StateModel.findByIdAndUpdate(
+        id,
+        properties
       );
       return patchedItem == null ? undefined : patchedItem;
     };

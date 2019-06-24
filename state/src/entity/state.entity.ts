@@ -1,7 +1,7 @@
-import { BatteryCharge, Id, State, Type } from ".";
+import { BatteryCharge, State, Type } from ".";
 
 export interface IStateEntity {
-  readonly id: Id;
+  readonly id: string;
   readonly type: Type;
   readonly state: State;
   readonly batteryCharge?: BatteryCharge;
@@ -12,7 +12,7 @@ interface IBuildMakeStateOptions {
 }
 
 interface IMakeStateProperties {
-  id: Id;
+  id: string;
   type: Type;
   state: State;
   batteryCharge?: BatteryCharge;
