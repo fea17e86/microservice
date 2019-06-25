@@ -27,6 +27,6 @@ async function getStateModel() {
   return StateModel;
 }
 
-const StateProvider: IStateProvider = makeStateProvider({ getStateModel });
-
-export default StateProvider;
+export const StateProvider: IStateProvider = makeStateProvider({
+  getStateModel
+});

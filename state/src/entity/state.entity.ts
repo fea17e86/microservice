@@ -18,9 +18,7 @@ interface IMakeStateProperties {
   batteryCharge?: BatteryCharge;
 }
 
-export type MakeStateEntity = (
-  properties: IMakeStateProperties
-) => IStateEntity;
+export type MakeStateEntity = (options: IMakeStateProperties) => IStateEntity;
 
 export function buildMakeState({
   isStateEntityValid
