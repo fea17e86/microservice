@@ -11,4 +11,28 @@ describe("test makeState", () => {
     const props = { type: Type.BED, state: BedState.DIRTY };
     expect(() => makeState(props)).toThrowError();
   });
+
+  it("returned object cannot be altered", () => {
+    const item = makeState({
+      id: "test-id",
+      type: Type.BED,
+      state: BedState.DIRTY
+    });
+
+    expect(() => {
+      item.id = "new-id";
+    }).toThrowError();
+
+    expect(() => {
+      item.type = Type.REPEATER;
+    }).toThrowError();
+
+    expect(() => {
+      item.state = RepeaterState.IN_MAINTENANCE;
+    }).toThrowError();
+
+    expect(() => {
+      item.batteryCharge = undefined;
+    }).toThrowError();
+  });
 });
