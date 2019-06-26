@@ -9,7 +9,6 @@ import { isBatteryChargeValid } from "./battery-charge.validator";
 describe("isBatteryChargeValid", () => {
   const validCombinations = [
     { batteryCharge: 0.8, type: Type.BEACON },
-    { type: Type.BEACON },
     { type: Type.BED }
   ];
 
@@ -17,6 +16,12 @@ describe("isBatteryChargeValid", () => {
     it(`must return true for valid type: ${type} and batteryCharge: ${batteryCharge}`, () => {
       expect(isBatteryChargeValid(type, batteryCharge)).toBeTruthy();
     });
+  });
+
+  it(`must throw "${ERROR_BATTERY_CHARGE_FINITE_NUMBER}" when provided with type: ${Type.BEACON} and batteryChargd: undefined`, () => {
+    expect(() => isBatteryChargeValid(Type.BEACON, undefined)).toThrow(
+      ERROR_BATTERY_CHARGE_FINITE_NUMBER
+    );
   });
 
   it(`must throw "${ERROR_BATTERY_CHARGE_FINITE_NUMBER}" when provided with string as batteryCharge`, () => {
