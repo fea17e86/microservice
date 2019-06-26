@@ -1,7 +1,7 @@
 import { IStateEntity, MakeStateEntity, State, Type } from "../entity";
 import { IStateProvider } from "../provider";
 
-interface IBuildUpdateState {
+interface IBuildSetState {
   makeState: MakeStateEntity;
   StateProvider: IStateProvider;
 }
@@ -15,7 +15,7 @@ export type SetState = (
 export function buildSetState({
   makeState,
   StateProvider
-}: IBuildUpdateState): SetState {
+}: IBuildSetState): SetState {
   return async function setState(
     id: string,
     type: Type,
